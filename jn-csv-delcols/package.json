@@ -1,6 +1,6 @@
 {
   "name": "jn-csv-delcols",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Small utility to delete columns that do not conform to a predefined list.",
   "main": "index.js",
   "bin": {
