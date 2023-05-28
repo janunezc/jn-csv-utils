@@ -14,15 +14,17 @@ describe('filterCsvFile', () => {
   });
 
   it('should filter the CSV file correctly', (done) => {
-    filterCsvFile(csvFilePath, configFilePath);
+    filterCsvFile(csvFilePath, configFilePath)
+      .then(() => {
+        // Check if the filtered CSV file matches the expected output
+        const filteredCsvData = fs.readFileSync(expectedOutputFilePath, 'utf8');
+        const newCsvFilePath = csvFilePath.replace('.csv', '_FIX.csv');
+        const newCsvData = fs.readFileSync(newCsvFilePath, 'utf8');
 
-    // Check if the filtered CSV file matches the expected output
-    const filteredCsvData = fs.readFileSync(expectedOutputFilePath, 'utf8');
-    const newCsvFilePath = csvFilePath.replace('.csv', '_FIX.csv');
-    const newCsvData = fs.readFileSync(newCsvFilePath, 'utf8');
+        expect(newCsvData).toEqual(filteredCsvData);
 
-    expect(newCsvData).toEqual(filteredCsvData);
-
-    done();
-  });
+        done();
+      })
+      .catch(done); // Call done with error if the promise was rejected
+  },10000);
 });
