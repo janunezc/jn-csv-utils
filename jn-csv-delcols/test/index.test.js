@@ -6,6 +6,13 @@ const configFilePath = './column_config.txt';
 const expectedOutputFilePath = './test/data/expected_output.csv';
 
 describe('filterCsvFile', () => {
+  afterEach(() => {
+    const newCsvFilePath = csvFilePath.replace('.csv', '_FIX.csv');
+    if (fs.existsSync(newCsvFilePath)) {
+      fs.unlinkSync(newCsvFilePath);
+    }
+  });
+
   it('should filter the CSV file correctly', (done) => {
     filterCsvFile(csvFilePath, configFilePath);
 
@@ -15,9 +22,6 @@ describe('filterCsvFile', () => {
     const newCsvData = fs.readFileSync(newCsvFilePath, 'utf8');
 
     expect(newCsvData).toEqual(filteredCsvData);
-
-    // Clean up the generated file
-    fs.unlinkSync(newCsvFilePath);
 
     done();
   });

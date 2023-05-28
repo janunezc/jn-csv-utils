@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "Small utility to delete columns that do not conform to a predefined list.",
   "main": "index.js",
+  "bin": {
+    "jn-csv-delcols": "./index.js"
+  },
   "scripts": {
     "test": "jest"
   },
@@ -20,7 +23,8 @@
   "license": "MIT",
   "dependencies": {
     "csv-parser": "^3.0.0",
-    "csv-writer": "^1.6.0"
+    "csv-writer": "^1.6.0",
+    "json2csv": "^6.0.0-alpha.2"
   },
   "devDependencies": {
     "jest": "^29.5.0"

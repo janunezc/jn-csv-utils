@@ -1,48 +1,39 @@
+#!/usr/bin/env node
 const fs = require('fs');
 const path = require('path');
 const csv = require('csv-parser');
+const { createObjectCsvWriter } = require('csv-writer');
+const json2csv = require('json2csv').parse;
+
+console.log = function(){};
+
+const allowedColumns = fs.readFileSync('column_config.txt', 'utf8').split(',');
 
 function filterCsvFile(csvFilePath, configFilePath) {
-  const columnConfig = fs.readFileSync(configFilePath, 'utf8').trim();
-  const predefinedColumns = columnConfig.split(',');
-
-  const rows = [];
-  const header = [];
-  let filteredRows = [];
+  const data = [];
 
   fs.createReadStream(csvFilePath)
     .pipe(csv())
-    .on('headers', (headers) => {
-      header.push(...headers);
-    })
     .on('data', (row) => {
-      rows.push(row);
+      const filteredRow = {};
+      allowedColumns.forEach((col) => {
+        if (row[col] !== undefined) {
+          filteredRow[col] = row[col];
+        }
+      });
+      data.push(filteredRow);
     })
     .on('end', () => {
-      const indicesToRemove = header
-        .map((column, index) => (predefinedColumns.includes(column) ? -1 : index))
-        .filter((index) => index >= 0)
-        .reverse();
 
-      filteredRows = rows.map((row) => {
-        indicesToRemove.forEach((index) => {
-          delete row[index];
-        });
-        return row;
-      });
+      console.log('CSV file successfully processed');
 
-      const newCsvFilePath = path.join(path.dirname(csvFilePath), `${path.basename(csvFilePath, '.csv')}_FIX.csv`);
+      const newFilePath = path.join(path.dirname(csvFilePath), path.basename(csvFilePath, '.csv') + '_FIX.csv');
+      const csv = json2csv(data, { fields: allowedColumns });
+      fs.writeFileSync(newFilePath, csv);
 
-      const csvStream = fs.createWriteStream(newCsvFilePath);
-      csvStream.write(header.join(',') + '\n');
-      filteredRows.forEach((row) => {
-        csvStream.write(Object.values(row).join(',') + '\n');
-      });
-
-      csvStream.end();
-
-      console.log(`Filtered CSV file saved as ${newCsvFilePath}`);
+      console.log('Filtered CSV file has been written: ', newFilePath);
     });
+
 }
 
 module.exports = filterCsvFile;
