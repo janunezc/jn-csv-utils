@@ -1,0 +1,28 @@
+{
+  "name": "jn-csv-delcols",
+  "version": "0.0.1",
+  "description": "Small utility to delete columns that do not conform to a predefined list.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/janunezc-jn-csv-utils.git"
+  },
+  "keywords": [
+    "CSV",
+    "Delete",
+    "column",
+    "specification"
+  ],
+  "author": "Jose Nunez",
+  "license": "MIT",
+  "dependencies": {
+    "csv-parser": "^3.0.0",
+    "csv-writer": "^1.6.0"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0"
+  }
+}
