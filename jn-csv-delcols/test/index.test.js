@@ -1,4 +1,4 @@
-const filterCsvFile = require('../index');
+const filterCsvFile = require('../library');
 const fs = require('fs');
 
 const csvFilePath = './test/data/test.csv';
